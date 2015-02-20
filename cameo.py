@@ -20,7 +20,7 @@ class Cameo(object):
             
             if frame is not None:
                 
-                # TODO: Track faces (Chapter 3).
+                # TODO: Track faces
                 
                 filters.strokeEdges(frame, frame)
                 self._curveFilter.apply(frame, frame)
