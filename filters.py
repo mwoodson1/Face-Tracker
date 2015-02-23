@@ -90,7 +90,7 @@ def blend(foregroundSrc, backgroundSrc, dst, alphaMask):
     # Merge the blended channels into the destination.
     cv2.merge(backgroundChannels, dst)
 
-
+#Blur and find edges and multiply by orignal image to darken edges
 def strokeEdges(src, dst, blurKsize = 7, edgeKsize = 5):
     if blurKsize >= 3:
         blurredSrc = cv2.medianBlur(src, blurKsize)

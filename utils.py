@@ -54,3 +54,12 @@ def createCompositeFunc(func0, func1):
     if func1 is None:
         return func0
     return lambda x: func0(func1(x))
+
+def isGray(image):
+    """Returns whether or not the image is grayscale or not"""
+    return image.ndim < 3
+
+def widthHeightDivideBy(image, divisor):
+    """Divide the width and height of an image by a constant"""
+    h, w = image.shape[:2]
+    return (w/divisor,h/divisor)
