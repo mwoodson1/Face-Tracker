@@ -1,6 +1,8 @@
 import cv2
 import filters
 from managers import WindowManager, CaptureManager
+import rects
+from trackers import FaceTracker
 
 class Cameo(object):
     
@@ -9,6 +11,8 @@ class Cameo(object):
                                              self.onKeypress)
         self._captureManager = CaptureManager(
             cv2.VideoCapture(0), self._windowManager, True)
+        self._faceTracker = FaceTracker()
+        self._shouldDrawDebugRects = False
         self._curveFilter = filters.BGRPortraCurveFilter()
     
     def run(self):
@@ -19,11 +23,15 @@ class Cameo(object):
             frame = self._captureManager.frame
             
             if frame is not None:
-                
+                self._faceTracker.update(frame)
+                faces = self._faceTracker.faces
+                rects.swapRects(frame,frame,[face.faceRect for face in faces])
+                if(self._shouldDrawDebugRects):
+                    self._faceTracker.drawDebugRects(frame)
 
                 
-                filters.strokeEdges(frame, frame)
-                self._curveFilter.apply(frame, frame)
+                #filters.strokeEdges(frame, frame)
+                #self._curveFilter.apply(frame, frame)
             
             self._captureManager.exitFrame()
             self._windowManager.processEvents()
@@ -34,6 +42,7 @@ class Cameo(object):
         space  -> Take a screenshot.
         tab    -> Start/stop recording a screencast.
         escape -> Quit.
+        d      -> Debug draw rects around facial features
         
         """
         if keycode == 32: # space
@@ -46,6 +55,8 @@ class Cameo(object):
                 self._captureManager.stopWritingVideo()
         elif keycode == 27: # escape
             self._windowManager.destroyWindow()
+        elif keycode == 100: # d
+            self._shouldDrawDebugRects = not self._shouldDrawDebugRects
 
 if __name__=="__main__":
     Cameo().run()

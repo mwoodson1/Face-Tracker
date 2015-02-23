@@ -16,7 +16,7 @@ def copyRect(src, dst, srcRect, dstRect, interpolation = cv2.INTER_LINEAR):
 
 def swapRects(src, dst,rects, interpolation = cv2.INTER_LINEAR):
     """Copy the source with two or more rectangles swapped"""
-    if st is not src:
+    if dst is not src:
         dst[:] = src
 
     numRects = len(rects)
